@@ -1,54 +1,51 @@
-[![Docker Stars](https://img.shields.io/docker/stars/bpinaya/robond-docker.svg)](https://hub.docker.com/r/bpinaya/robond-docker/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/bpinaya/robond-docker.svg)](https://hub.docker.com/r/bpinaya/robond-docker/)
+# ROS Melodic - VNC-enabled Docker container
+Docker container featuring a full ROS Melodic Ubuntu Bionic installation. Quick and easy way to set up ROS in an isolated environment, with convenient HTML5 and VNC to access the desktop environment. Heavily based on [bpinaya's project](https://github.com/bpinaya/robond-docker).
 
-# Udacity RoboND Docker container
-
-[//]: # (Image References)	
-
-[image0]: ./img/redme5.png "All installed"
-[image1]: ./img/redme1.png "1"
-[image2]: ./img/redme2.png "2"
-[image3]: ./img/redme3.png "3"
-[image4]: ./img/redme4.png "4"
-[imagewin]: ./img/imagewin.PNG "imagewin"
-![alt text][image0]
-This is a Docker Container for Udacity's Robotics Nanodegree, it'll allow you to run Assigment 2 on your browser from any OS:
-  - Linux (Tested in Ubuntu 14.04)
-  - Windows (To be tested)
-  - MacOS (To be tested)
-
-This container was born out of need, since I need 14.04 in my computer but needed ROS Kinetic for this assigment, and VMware just doesn't do it for me. Feel free to submit PR and file bugs if you encounter them.
-## Set up
-
-You'll need to install Docker in your computer, if you've used Docker before this step should be straight forward, otherwise check [this link](https://www.docker.com/what-docker) for more information about it.
+## Setup
+You'll need to install Docker in your computer, if you've used Docker before this step should be straightforward, otherwise check [this link](https://www.docker.com/what-docker) for more information about it.
   - Installation's instructions for Ubuntu can be found [HERE](https://docs.docker.com/engine/installation/linux/ubuntu/)
   - Installation's instructions for Windows can be found [HERE](https://docs.docker.com/docker-for-windows/install/)
   - Installation's instructions for MacOS can be found [HERE](https://docs.docker.com/docker-for-mac/install/)
 
-After you have Docker installed, running the container should be as easy as typing:
-```bash
-docker run -it --rm -p 6080:80 bpinaya/robond-docker
+In some Linux distros (e.g. Ubuntu) you need to run `docker` with admin privileges. You can hide this by setting an alias
 ```
-in your terminal (Note that in Ubuntu, if not set up properly, you'll need sudo to run the container).
-
-If you want to use a VNC client (Like [RealVNC](https://www.realvnc.com/download/viewer/)), try running this line:
-```bash
-docker run -it --rm -p 6080:80 -p 5900:5900 bpinaya/robond-docker
+echo "alias docker='sudo docker'" >> ~/.bash_aliases
 ```
-Then open it in your VNC viewer with the port 5900.
 
-**NOTE** If you are using Windows, you might want to figure out the IP that it gives to Docker, it's easy, if you open your Docker terminal it should be within the first lines, like this:
+or
 
-![alt text][imagewin]
+```
+sudo addgroup --system docker
+sudo adduser $USER docker
+newgrp docker
 
-As you can see, the IP for that docker is ` 192.168.99.100` . So navigate to ` 192.168.99.100:6080` if you are using the browser option.
+```
+
+## Running the container
+
+After having installed Docker, you can pull the image and run the container with
+```
+docker run -it --rm fbottarel/ros-desktop-full-vnc
+```
+This will pull the image from the repo and start it as a container. You will be logged as root in the container console and will see some debug messages.
+
+
+![alt text](img/readme1.png)
+
+
+For a quick sanity check, you can run in another terminal
+
+```
+docker exec -it `docker ps -l -q` bash
+```
+This will open a terminal console in the container, letting you type in whatever command you might need. Try launching `roscore` or any command you would expect to work in a ROS installation. If the ros master spins up, everything seems in order.
 
 ## Using your container
-After you've run that command, you'll probable wait for the container to download, then you'll see an output like this:
-![alt text][image1]
-
-
-then, open your favorite browser (Chrome is prefered, but tested in Firefox) and navigate to:
+You can make use of the HTML5 interface by launching the container with a specific port
+```
+docker run -it --rm -p 6080:80 fbottarel/ros-desktop-full-vnc
+```
+and then you can access to it by navigating to
 ```
 localhost:6080
 ```
@@ -56,44 +53,29 @@ or
 ```
 127.0.0.1:6080
 ```
-and you should see your desktop like this:
-![alt text][image2]
-
-And there you have it! Your own 16.04 with everything you need to get working installed.
-## Running your second assigment
-
-As you've seen in the lessons, you need to navigate and create your work environment, but this is already done for you. Right now, you'll need 4 terminals (Also we'll run the demo here, so remember to set the `demo` value in `inverse_kinematics.launch` to `true`). You can open terminals like this:
-![alt text][image3]
-In the first terminal type:
-```
-roslaunch kuka_arm target_description.launch
-```
-In the second one type:
-```
-roslaunch kuka_arm cafe.launch
-```
-In the thrid one type:
-```
-roslaunch kuka_arm spawn_target.launch
-```
-And lastly in the fourth one:
-```
-roslaunch kuka_arm inverse_kinematics.launch
-```
-
-And that's it!!! You have your environment running wherever you want. As you might have noticed, running this 4 commands in 4 different windows in the same than running your `safe_spawner.sh` script, but running that won't work, I am trying to figure out why, then again this repo will improve, and eventually add all the assigments. Check that you see this:
-![alt text][image4]
-
-**NOTE** Be aware of your files, if you load docker with your local volumes you'll be able to save your changes, otherwise you'll have to commit your changes to your favorite Content Managment System (Github ;) )
+in any browser window. You should see your desktop like this:
 
 
-## Todos
+![alt text](img/readme2.png)
 
- - Support local container save (right now you can use docker commit, but be aware)
- - Add other Udacity Assigments.
- - ? ask me for more things you'll like to see here
+If you want to use a VNC client (Like [RealVNC](https://www.realvnc.com/download/viewer/)), go with
+```
+docker run -it --rm -p 6080:80 -p 5900:5900 fbottarel/ros-desktop-full-vnc
+```
+Then open it in your VNC viewer with the port 5900.
+
+## Mounting volumes
+
+The image comes with a catkin workspace already set up in `/home/ubuntu/ros_wsp`. You can write and pull packages in the container, however __keep in mind that any change will be gone when you kill the container__. Make sure to push your changes (either with `docker commit`, or on any external software repo e.g. github) before you kill the container.
+
+A fast and easy way to retain any change in your catkin workspace is to mount it as a volume in the host operating system. For instance, let's say you use Ubuntu and your catkin workspace is in `/home/user/catkin_ws`, you can run the container with the following command
+```
+docker run -it --rm -p 6080:80 -p 5900:5900 -v /home/ubuntu/ros_ws:/home/user/catkin_ws /fbottarel/ros-desktop-full-vnc
+```
+
+You can populate the directory as you wish from the host system, and the packages will show up in the container workspace.
 
 ## Acknowledgements
+
  - This image is based on [FCWU image](https://github.com/fcwu/docker-ubuntu-vnc-desktop) , that has the support for the VNC server with browser support, so no VNC client is needed, kudos to him!
- - OSRF Dockerfiles, that helped me shape this image to the needs.
- - The Udacity folks, for all their support.
+- Part of the readme and the images come from [bpinaya](https://github.com/bpinaya/robond-docker)'s project. Equal kudos must be delivered there :P
