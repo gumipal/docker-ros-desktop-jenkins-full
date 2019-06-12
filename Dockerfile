@@ -23,7 +23,8 @@ RUN mkdir -p ~/ros_ws/src
 RUN /bin/bash -c "source /opt/ros/melodic/setup.bash && \
                   cd ~/ros_ws/ && \
                   catkin_make && \
-                  echo 'source ~/ros_ws/devel/setup.bash' >> ~/.bashrc"
+                  echo 'source ~/ros_ws/devel/setup.bash' >> ~/.bashrc" && \
+                  echo 'source ~/ros_ws/devel/setup.bash' >> /root/.bashrc'
 
 RUN sudo apt install -y python-rosinstall python-rosinstall-generator python-wstool build-essential
 

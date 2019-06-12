@@ -64,16 +64,17 @@ docker run -it --rm -p 6080:80 -p 5900:5900 fbottarel/ros-desktop-full-vnc
 ```
 Then open it in your VNC viewer with the port 5900.
 
-## Mounting volumes
+## Share files with the container
 
 The image comes with a catkin workspace already set up in `/home/ubuntu/ros_wsp`. You can write and pull packages in the container, however __keep in mind that any change will be gone when you kill the container__. Make sure to push your changes (either with `docker commit`, or on any external software repo e.g. github) before you kill the container.
 
-A fast and easy way to retain any change in your catkin workspace is to mount it as a volume in the host operating system. For instance, let's say you use Ubuntu and your catkin workspace is in `/home/user/catkin_ws`, you can run the container with the following command
+A fast and easy way to retain any change in your catkin workspace is to mount it as a volume in the host operating system. For instance, let's say you use Ubuntu and your catkin workspace is in `/home/fbottarel/catkin_ws`, you can run the container with the following command
+
 ```
-docker run -it --rm -p 6080:80 -p 5900:5900 -v /home/ubuntu/ros_ws:/home/user/catkin_ws /fbottarel/ros-desktop-full-vnc
+docker run -it --rm -p 6080:80 -p 5900:5900 -v /home/fbottarel/catkin_ws:/home/ubuntu/ros_ws /fbottarel/ros-desktop-full-vnc
 ```
 
-You can populate the directory as you wish from the host system, and the packages will show up in the container workspace.
+You can populate the directory as you wish from the host system, and the packages will show up in the container workspace (and vice versa!).
 
 ## Acknowledgements
 
