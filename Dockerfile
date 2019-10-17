@@ -2,11 +2,11 @@
 FROM dorowu/ubuntu-desktop-lxde-vnc:bionic
 LABEL maintainer "info@mipal.net.au"
 
-RUN apt update && apt upgrade -y && apt install -y git curl wget
+RUN apt-get update && apt-get upgrade -y && apt-get install -y git curl wget
 # && rm -rf /var/lib/apt/lists/*
 
 # Fix dirmngr
-RUN sudo apt purge dirmngr -y && sudo apt update && sudo apt install dirmngr -y
+RUN sudo apt purge dirmngr -y && sudo apt-get install dirmngr -y
 
 # Add the official Java repository
 RUN sudo add-apt-repository ppa:webupd8team/java
