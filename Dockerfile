@@ -47,8 +47,8 @@ ARG TINI_VERSION=v0.16.1
 COPY tini_pub.gpg ${JENKINS_HOME}/tini_pub.gpg
 RUN sudo curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture) -o /sbin/tini \
   && sudo curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture).asc -o /sbin/tini.asc \
-  && sudo gpg --no-tty --import ${JENKINS_HOME}/tini_pub.gpg \
-  && sudo gpg --verify /sbin/tini.asc \
+  && sudo env HOME=/root gpg --no-tty --import ${JENKINS_HOME}/tini_pub.gpg \
+  && sudo env HOME=/root gpg --verify /sbin/tini.asc \
   && sudo rm -rf /sbin/tini.asc /root/.gnupg \
   && sudo chmod +x /sbin/tini
 
