@@ -2,8 +2,8 @@
 FROM dorowu/ubuntu-desktop-lxde-vnc:bionic
 LABEL maintainer "info@mipal.net.au"
 
-#RUN apt-get update && apt-get upgrade -y && apt-get install -y git curl wget
-RUN apt-get update && apt-get install -y git curl wget
+RUN apt-get update && apt-get upgrade -y && apt-get install -y git curl wget
+#RUN apt-get update && apt-get install -y git curl wget
 # && rm -rf /var/lib/apt/lists/*
 
 # Fix dirmngr
