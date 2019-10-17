@@ -45,12 +45,12 @@ RUN mkdir -p ${REF}/init.groovy.d
 # Use tini as subreaper in Docker container to adopt zombie processes
 ARG TINI_VERSION=v0.16.1
 COPY tini_pub.gpg ${JENKINS_HOME}/tini_pub.gpg
-RUN curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture) -o /sbin/tini \
-  && curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture).asc -o /sbin/tini.asc \
-  && gpg --no-tty --import ${JENKINS_HOME}/tini_pub.gpg \
-  && gpg --verify /sbin/tini.asc \
-  && rm -rf /sbin/tini.asc /root/.gnupg \
-  && chmod +x /sbin/tini
+RUN sudo curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture) -o /sbin/tini \
+  && sudo curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture).asc -o /sbin/tini.asc \
+  && sudo gpg --no-tty --import ${JENKINS_HOME}/tini_pub.gpg \
+  && sudo gpg --verify /sbin/tini.asc \
+  && sudo rm -rf /sbin/tini.asc /root/.gnupg \
+  && sudo chmod +x /sbin/tini
 
 # jenkins version being bundled in this docker image
 ARG JENKINS_VERSION
